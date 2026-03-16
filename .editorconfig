@@ -10,6 +10,7 @@ indent_style = space
 
 [*.{md,yml,yaml,html,css,scss,js,r,rmd,R,Rmd}]
 indent_size = 2
+trim_trailing_whitespace = false
 
 # These files are edited and tested upstream in nf-core/modules
 [/modules/nf-core/**]
