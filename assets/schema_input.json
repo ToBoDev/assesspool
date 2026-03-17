@@ -17,7 +17,7 @@
                 "type": "string",
                 "format": "file-path",
                 "exists": true,
-                "pattern": "^\\S+\\.(vcf|sync)(\\.gz)?$",
+                "pattern": "^\\S+\\.(vcf|sync)(\\.gz)?(\\?.+)?$",
                 "errorMessage": "Input file must be provided in the `input` column, cannot contain spaces, and must have extension '.vcf', '.sync', 'vcf.gz', or '.sync.gz'"
             },
             "vcf_index": {
@@ -31,7 +31,7 @@
                 "type": "string",
                 "format": "file-path",
                 "exists": true,
-                "pattern": "^\\S+\\.fa(s?ta)?(\\.gz)?$",
+                "pattern": "^\\S+\\.fa(s?ta)?(\\.gz)?(\\?.+)?$",
                 "errorMessage": "Reference FASTA must be provided in the `reference` column, cannot contain spaces, and must have extension '.fa/fa.gz' or '.fasta/fasta.gz'"
             },
             "pools": {
