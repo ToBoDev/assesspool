@@ -1,8 +1,11 @@
+<h1>
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/images/logo.png" >
     <img height="150px" alt="assessPool" src="docs/images/logo.png" >
   </picture>
+</h1>
 
+[![Nextflow](https://img.shields.io/badge/nextflow-%E2%89%A50.24.04.2-brightgreen.svg)](https://www.nextflow.io/)
 
 ## Introduction
 
