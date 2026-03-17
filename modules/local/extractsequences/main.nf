@@ -1,19 +1,20 @@
-process FISHERTEST {
+process EXTRACT_SEQUENCES {
     tag "$meta.id"
-    label 'process_single'
+    label 'process_single_mem'
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/mulled-v2-91e4157032c00e9d9ac47f9837a67abee8f5afc2:7945c7dcdead60dfcbf06b19f4758634d6ad230a-0':
-        'biocontainers/mulled-v2-91e4157032c00e9d9ac47f9837a67abee8f5afc2:7945c7dcdead60dfcbf06b19f4758634d6ad230a-0' }"
+        'https://depot.galaxyproject.org/singularity/mulled-v2-24c2519e6f79268102473627bccca112fa9f03b6:b565a85a493491c260acda69b780ef6ffa1cda87-0':
+        'biocontainers/mulled-v2-24c2519e6f79268102473627bccca112fa9f03b6:b565a85a493491c260acda69b780ef6ffa1cda87-0' }"
 
     input:
-    tuple val(meta), val(pools), path(frequency)
+    tuple val(meta), path(fasta), path(fai)
+    tuple val(meta), path(fst)
+    val(fst_cutoff)
 
     output:
-    tuple val(meta), path("*_window_*_fisher.tsv"), emit: fisher
-    tuple val(meta), path("*_all_snps_fisher.tsv"), emit: all_snps, optional: true
-    path "versions.yml"                           , emit: versions
+    tuple val(meta), path("*.fasta"), emit: fasta
+    path "versions.yml"             , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -21,18 +22,20 @@ process FISHERTEST {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-    def pool_arg = "--pools '${pools.join(',')}'"
     """
-    fisher.R \\
-        ${args} \\
-        ${pool_arg} \\
-        --prefix "${prefix}" \\
-        ${frequency}
+    extractsequences.R \\
+        $args \\
+        --fst-cutoff ${fst_cutoff} \\
+        --output ${prefix}.fasta \\
+        --index ${fai} \\
+        $fasta \\
+        $fst
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         R: \$(Rscript -e "cat(paste(R.version[c('major','minor')],collapse='.'))")
         optparse: \$(Rscript -e "cat(paste(packageVersion('optparse')),sep='.')")
+        Rsamtools: \$(Rscript -e "cat(paste(packageVersion('Rsamtools')),sep='.')")
         data.table: \$(Rscript -e "cat(paste(packageVersion('data.table')),sep='.')")
     END_VERSIONS
     """
@@ -41,12 +44,14 @@ process FISHERTEST {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    touch "${prefix}_window_stub_fisher.tsv"
+
+    touch ${prefix}.fasta
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         R: \$(Rscript -e "cat(paste(R.version[c('major','minor')],collapse='.'))")
         optparse: \$(Rscript -e "cat(paste(packageVersion('optparse')),sep='.')")
+        Rsamtools: \$(Rscript -e "cat(paste(packageVersion('Rsamtools')),sep='.')")
         data.table: \$(Rscript -e "cat(paste(packageVersion('data.table')),sep='.')")
     END_VERSIONS
     """

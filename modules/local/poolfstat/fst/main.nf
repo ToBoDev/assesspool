@@ -4,8 +4,8 @@ process POOLFSTAT_FST {
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/mulled-v2-5d425a6e26ab032a4dcba5bc997f43ab9299830a:a1958d454debf3df6f397d04d5f094df68682ef9-0':
-        'biocontainers/mulled-v2-5d425a6e26ab032a4dcba5bc997f43ab9299830a:a1958d454debf3df6f397d04d5f094df68682ef9-0' }"
+        'https://depot.galaxyproject.org/singularity/mulled-v2-618be27569d1bdadeed1044f0388638f6bfca2ae:095239e9e7e75cc2b7273c9a69167d844dd9b634-0':
+        'biocontainers/mulled-v2-618be27569d1bdadeed1044f0388638f6bfca2ae:095239e9e7e75cc2b7273c9a69167d844dd9b634-0' }"
 
     input:
     tuple val(meta), val(pool_map), path(sync)
@@ -39,11 +39,7 @@ process POOLFSTAT_FST {
         R: \$(Rscript -e "cat(paste(R.version[c('major','minor')],collapse='.'))")
         poolfstat: \$(Rscript -e "cat(paste(packageVersion('poolfstat')),sep='.')")
         optparse: \$(Rscript -e "cat(paste(packageVersion('optparse')),sep='.')")
-        tibble: \$(Rscript -e "cat(paste(packageVersion('tibble')),sep='.')")
-        stringr: \$(Rscript -e "cat(paste(packageVersion('stringr')),sep='.')")
-        readr: \$(Rscript -e "cat(paste(packageVersion('readr')),sep='.')")
-        purrr: \$(Rscript -e "cat(paste(packageVersion('purrr')),sep='.')")
-        dplyr: \$(Rscript -e "cat(paste(packageVersion('dplyr')),sep='.')")
+        data.table: \$(Rscript -e "cat(paste(packageVersion('data.table')),sep='.')")
     END_VERSIONS
     """
 
@@ -58,11 +54,7 @@ process POOLFSTAT_FST {
         R: \$(Rscript -e "cat(paste(R.version[c('major','minor')],collapse='.'))")
         poolfstat: \$(Rscript -e "cat(paste(packageVersion('poolfstat')),sep='.')")
         optparse: \$(Rscript -e "cat(paste(packageVersion('optparse')),sep='.')")
-        tibble: \$(Rscript -e "cat(paste(packageVersion('tibble')),sep='.')")
-        stringr: \$(Rscript -e "cat(paste(packageVersion('stringr')),sep='.')")
-        readr: \$(Rscript -e "cat(paste(packageVersion('readr')),sep='.')")
-        purrr: \$(Rscript -e "cat(paste(packageVersion('purrr')),sep='.')")
-        dplyr: \$(Rscript -e "cat(paste(packageVersion('dplyr')),sep='.')")
+        data.table: \$(Rscript -e "cat(paste(packageVersion('data.table')),sep='.')")
     END_VERSIONS
     """
 }

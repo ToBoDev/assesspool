@@ -1,6 +1,6 @@
 {
-    "name": "nf-core/assesspool",
-    "homePage": "https://github.com/nf-core/assesspool",
+    "name": "assessPool",
+    "homePage": "https://github.com/tobodev/assesspool",
     "repos": {
         "https://github.com/nf-core/modules.git": {
             "modules": {
@@ -13,11 +13,6 @@
                     "bcftools/query": {
                         "branch": "master",
                         "git_sha": "0e9cb409c32d3ec4f0d3804588e4778971c09b7e",
-                        "installed_by": ["modules"]
-                    },
-                    "bcftools/reheader": {
-                        "branch": "master",
-                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
                         "installed_by": ["modules"]
                     },
                     "bcftools/view": {
