@@ -1,4 +1,6 @@
 lint:
+  nextflow_config:
+    - manifest.homePage
   files_exist:
     - conf/igenomes.config
     - conf/igenomes_ignored.config
