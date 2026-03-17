@@ -1,6 +1,6 @@
 {
-    "name": "nf-core/assesspool",
-    "homePage": "https://github.com/nf-core/assesspool",
+    "name": "assessPool",
+    "homePage": "https://github.com/tobodev/assesspool",
     "repos": {
         "https://github.com/nf-core/modules.git": {
             "modules": {

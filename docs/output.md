@@ -1,4 +1,4 @@
-# nf-core/assesspool: Output
+# assessPool: Output
 
 ## Introduction
 

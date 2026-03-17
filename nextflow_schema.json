@@ -1,7 +1,7 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://raw.githubusercontent.com/nf-core/assesspool/main/nextflow_schema.json",
-    "title": "nf-core/assesspool pipeline parameters",
+    "$id": "https://raw.githubusercontent.com/tobodev/assesspool/main/nextflow_schema.json",
+    "title": "assessPool pipeline parameters",
     "description": "nextflow-enabled version of assessPool radseq processing pipeline",
     "type": "object",
     "$defs": {
