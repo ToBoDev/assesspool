@@ -19,7 +19,7 @@ include { RIPGREP as COUNT_SNPS                      } from '../../../modules/nf
 
 include { BCFTOOLS_VIEW as BCFTOOLS_COMPRESS_INDEX_FILTERED } from '../../../modules/nf-core/bcftools/view/main'
 
-workflow FILTER_SIM_VCF {
+workflow FILTER_SIM {
 
     take:
     ch_vcf
@@ -179,7 +179,11 @@ workflow FILTER_SIM_VCF {
 
     // turn all the count maps into tsv files describing filtering results
     ch_filter_summary = ch_filter_summary
-        .collectFile(newLine: true, sort: true) { meta, filter -> [ "${meta.id}.filter", "${filter.filter}\t${filter.count}" ] }
+        .map{ meta, count -> meta.subMap('id') }
+        .unique()
+        .map{ meta -> [ meta, [ filter: 'filter', count: 'count' ] ] }
+        .concat( ch_filter_summary )
+        .collectFile(newLine: true, sort: false) { meta, filter -> [ "${meta.id}.filter", "${filter.filter}\t${filter.count}" ] }
         .map{ [it.baseName, it] }
 
     // join back to meta tag

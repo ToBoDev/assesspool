@@ -1,9 +1,11 @@
 #!/usr/bin/env nextflow
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    assesspool
+    nf-core/assesspool
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Github : https://github.com/tobodev/assesspool
+    Github : https://github.com/nf-core/assesspool
+    Website: https://nf-co.re/assesspool
+    Slack  : https://nfcore.slack.com/channels/assesspool
 ----------------------------------------------------------------------------------------
 */
 

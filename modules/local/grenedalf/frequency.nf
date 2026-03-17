@@ -25,6 +25,10 @@ process GRENEDALF_FREQUENCY {
     def fasta_arg = fasta ? "--reference-genome-fasta ${fasta}" : ""
     def fai_arg = fai ? "--reference-genome-fai ${fai}" : ""
     """
+    # TODO: grenedalf command here
+    # // --sync-path ../two_pops.sync
+    # // --reference-genome-fai ../ref.fasta.fai
+    # // --file-prefix freq
     grenedalf frequency \\
         --file-prefix "${prefix}_" \\
         --threads ${task.cpus} \\

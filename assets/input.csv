@@ -1,2 +1,0 @@
-project,input,vcf_index,reference,pools,pool_sizes
-poolseq_test,data/pools.vcf.gz,data/pools.vcf.gz.tbi,data/ref.fasta,,"35,38,22,52,17,19"

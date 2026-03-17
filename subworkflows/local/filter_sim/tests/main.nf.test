@@ -2,9 +2,9 @@
 // nf-core subworkflows test filter_sim
 nextflow_workflow {
 
-    name "Test Subworkflow FILTER_SIM_VCF"
+    name "Test Subworkflow FILTER_SIM"
     script "../main.nf"
-    workflow "FILTER_SIM_VCF"
+    workflow "FILTER_SIM"
 
     tag "subworkflows"
     tag "subworkflows_"

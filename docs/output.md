@@ -1,4 +1,4 @@
-# assessPool: Output
+# nf-core/assesspool: Output
 
 ## Introduction
 
@@ -13,81 +13,6 @@ The directories listed below will be created in the results directory after the 
 The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes data using the following steps:
 
 - [Pipeline information](#pipeline-information) - Report metrics generated during the workflow execution
-
-### Index
-
-<details markdown="1">
-<summary>Output files</summary>
-
-- `index/`
-  - `*.fai/gzi`: FAI index of FASTA reference genome/assembly.
-  - `*.tbi`: VCF index.
-
-</details>
-
-Results from calling `samtools faidx` on the reference assembly and `tabix` on the input VCF.
-
-### Filtering results
-
-<details markdown="1">
-<summary>Output files</summary>
-
-- `filter/`
-  - `incremental/`
-    - VCF files (`*.vcf.gz`) and their associated index files (`*.tbi`) containing results of stepwise filtering operations.
-  - `bcftools/`
-    - Results of cumulative filtering operations performed using `bcftools` (`*.vcf.gz`, `*.tbi`)
-  - `vcftools/`
-    - Results of cumulative filtering operations performed using `cftools` (`*.vcf.gz`, `*.tbi`)
-
-</details>
-
-Results of VCF filtering. Contains both stepwise and and cumulative filter operations.
-
-### grenedalf sync
-
-<details markdown="1">
-<summary>Output files</summary>
-
-- `sync/`
-  - `pairwise/`
-    - `<project>_<pool1>-<pool2>.sync`: Individual (headerless) pairwise sync file.
-  - `<project>_sync.sync`: Sync file (in grenedalf headered format) for all pools.
-
-</details>
-
-Sync files generated from input VCF (or copied / filtered from input sync file).
-
-### Fisher's test results
-
-<details markdown="1">
-<summary>Output files</summary>
-
-- `fisher/`
-  - `assesspool/*.tsv`: pairwise Fisher's test results using built-in assessPool method
-  - `popoolation/*.fisher`: pairwise Fisher's test results using PoPoolation2
-  - `combined/<project>.fisher`: All concatenated pairwise Fisher's test results 
-
-
-</details>
-
-Results of Fisher's exact test calculations for each selected calculation method, both concatenated and single pairwise comparisons. 
-
-### F<sub>st</sub> results
-
-<details markdown="1">
-<summary>Output files</summary>
-
-- `fst/`
-  - `grenedalf/*.tsv`: F<sub>st</sub> results calculated using `grenedalf`.
-  - `popoolation/*.fst`: F<sub>st</sub> results calculated using `PoPoolation2`.
-  - `poolfstat/*.tsv`: F<sub>st</sub> results calculated using `poolfstat`.
-  - `<project>.fst`: Concatenated pairwise F<sub>st</sub> results for all methods
-
-</details>
-
-Pairwise F<sub>st</sub> results by individual calculation method and concatenated.
-
 
 ### Pipeline information
 

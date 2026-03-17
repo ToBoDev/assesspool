@@ -1,5 +1,5 @@
 //
-// Subworkflow with functionality specific to the assessPool pipeline
+// Subworkflow with functionality specific to the nf-core/assesspool pipeline
 //
 
 /*
@@ -73,17 +73,17 @@ workflow PIPELINE_INITIALISATION {
     Channel
         .fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
         .map {
-            meta, input, index, ref, pools, pool_sizes ->
+            meta, vcf, index, ref, pools, pool_sizes ->
                 def pp = pools ? pools.split(/,/) : []
                 def ps = (pool_sizes instanceof Number) ? [pool_sizes] : pool_sizes.split(/,/)
                 if (pp.size() != ps.size()) {
                     if (pp && ps.size() != 1) {
                         error "Pool sizes must either be a single number or a list the same length as `pools`"
                     } else if (pp && ps.size() == 1) {
-                        ps = (1..pp.size()).collect{ ps[0] }
+                        ps = [1..pp.size()].collect{ ps[0] }
                     }
                 }
-                return [ meta + [ pools: pp, pool_sizes: ps, rename: !(!pools) ],  input, index, ref  ]
+                return [ meta + [ pools: pp, pool_sizes: ps, rename: !(!pools) ],  vcf, index, ref  ]
         }
         .set { ch_samplesheet }
 
@@ -163,17 +163,11 @@ def validateInputSamplesheet(input) {
 // Generate methods description for MultiQC
 //
 def toolCitationText() {
+    // TODO nf-core: Optionally add in-text citation tools to this list.
     // Can use ternary operators to dynamically construct based conditions, e.g. params["run_xyz"] ? "Tool (Foo et al. 2023)" : "",
     // Uncomment function in methodsDescriptionText to render in MultiQC report
     def citation_text = [
             "Tools used in the workflow included:",
-            "PoPoolation2 (Kofler et al., 2011)",
-            "poolfstat (Gautier et al., 2022)",
-            "grenedalf (Czech & Expósito-Alonso, 2024)",
-            "bcftools (Danecek et al., 2021)",
-            "vcftools (Danecek et al., 2011)",
-            "samtools (Danecek et al., 2021)",
-            "Rsamtools (Morgan et al., 2024)",
             "."
         ].join(' ').trim()
 
@@ -181,13 +175,10 @@ def toolCitationText() {
 }
 
 def toolBibliographyText() {
+    // TODO nf-core: Optionally add bibliographic entries to this list.
+    // Can use ternary operators to dynamically construct based conditions, e.g. params["run_xyz"] ? "<li>Author (2023) Pub name, Journal, DOI</li>" : "",
+    // Uncomment function in methodsDescriptionText to render in MultiQC report
     def reference_text = [
-            "Kofler, R., Pandey, R. V., & Schlötterer, C. (2011). PoPoolation2: identifying differentiation between populations using sequencing of pooled DNA samples (Pool-Seq). Bioinformatics, 27(24), 3435-3436",
-            "Gautier, M., Vitalis, R., Flori, L., & Estoup, A. (2022). f-Statistics estimation and admixture graph construction with Pool-Seq or allele count data using the R package poolfstat. Molecular Ecology Resources, 22(4), 1394-1416",
-            "Czech, L., Spence, J. P., & Expósito-Alonso, M. (2024). grenedalf: population genetic statistics for the next generation of pool sequencing. Bioinformatics, 40(8), btae508",
-            "Danecek, P., Bonfield, J. K., Liddle, J., Marshall, J., Ohan, V., Pollard, M. O., ... & Li, H. (2021). Twelve years of SAMtools and BCFtools. Gigascience, 10(2), giab008",
-            "Danecek, P., Auton, A., Abecasis, G., Albers, C. A., Banks, E., DePristo, M. A., ... & 1000 Genomes Project Analysis Group. (2011). The variant call format and VCFtools. Bioinformatics, 27(15), 2156-2158",
-            "Morgan M, Pagès H, Obenchain V, Hayden N (2024). Rsamtools: Binary alignment (BAM), FASTA, variant call (BCF), and tabix file import. doi:10.18129/B9.bioc.Rsamtools, R package version 2.22.0, <https://bioconductor.org/packages/Rsamtools>"
         ].join(' ').trim()
 
     return reference_text
@@ -230,8 +221,12 @@ def methodsDescriptionText(mqc_methods_yaml) {
     meta["nodoi_text"] = meta.manifest_map.doi ? "" : "<li>If available, make sure to update the text to include the Zenodo DOI of version of the pipeline used. </li>"
 
     // Tool references
-    meta["tool_citations"] = toolCitationText().replaceAll(", \\.", ".").replaceAll("\\. \\.", ".").replaceAll(", \\.", ".")
-    meta["tool_bibliography"] = toolBibliographyText()
+    meta["tool_citations"] = ""
+    meta["tool_bibliography"] = ""
+
+    // TODO nf-core: Only uncomment below if logic in toolCitationText/toolBibliographyText has been filled!
+    // meta["tool_citations"] = toolCitationText().replaceAll(", \\.", ".").replaceAll("\\. \\.", ".").replaceAll(", \\.", ".")
+    // meta["tool_bibliography"] = toolBibliographyText()
 
 
     def methods_text = mqc_methods_yaml.text
