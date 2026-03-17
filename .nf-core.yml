@@ -1,13 +1,6 @@
 lint:
   nextflow_config:
     - manifest.homePage
-  files_exist:
-    - conf/igenomes.config
-    - conf/igenomes_ignored.config
-    - assets/multiqc_config.yml
-    - conf/igenomes.config
-    - conf/igenomes_ignored.config
-    - assets/multiqc_config.yml
   files_unchanged:
     - .github/CONTRIBUTING.md
     - assets/email_template.html
