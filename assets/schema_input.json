@@ -24,7 +24,7 @@
                 "type": "string",
                 "format": "file-path",
                 "exists": true,
-                "pattern": "^\\S+\\.vcf\\.gz\\.tbi$",
+                "pattern": "^\\S+\\.vcf\\.gz\\.tbi(\\?.+)?$",
                 "errorMessage": "VCF index file, must look like vcf_filename.vcf.gz.tbi"
             },
             "reference": {
