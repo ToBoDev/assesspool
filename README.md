@@ -1,64 +1,90 @@
-<h1>
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="docs/images/nf-core-assesspool_logo_dark.png">
-    <img alt="nf-core/assesspool" src="docs/images/nf-core-assesspool_logo_light.png">
+    <source media="(prefers-color-scheme: dark)" srcset="docs/images/logo.png" >
+    <img height="150px" alt="assessPool" src="docs/images/logo.png" >
   </picture>
-</h1>
 
-[![GitHub Actions CI Status](https://github.com/nf-core/assesspool/actions/workflows/ci.yml/badge.svg)](https://github.com/nf-core/assesspool/actions/workflows/ci.yml)
-[![GitHub Actions Linting Status](https://github.com/nf-core/assesspool/actions/workflows/linting.yml/badge.svg)](https://github.com/nf-core/assesspool/actions/workflows/linting.yml)[![AWS CI](https://img.shields.io/badge/CI%20tests-full%20size-FF9900?labelColor=000000&logo=Amazon%20AWS)](https://nf-co.re/assesspool/results)[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.XXXXXXX-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.XXXXXXX)
-[![nf-test](https://img.shields.io/badge/unit_tests-nf--test-337ab7.svg)](https://www.nf-test.com)
-
-[![Nextflow](https://img.shields.io/badge/version-%E2%89%A524.04.2-green?style=flat&logo=nextflow&logoColor=white&color=%230DC09D&link=https%3A%2F%2Fnextflow.io)](https://www.nextflow.io/)
-[![nf-core template version](https://img.shields.io/badge/nf--core_template-3.3.1-green?style=flat&logo=nfcore&logoColor=white&color=%2324B064&link=https%3A%2F%2Fnf-co.re)](https://github.com/nf-core/tools/releases/tag/3.3.1)
-[![run with conda](http://img.shields.io/badge/run%20with-conda-3EB049?labelColor=000000&logo=anaconda)](https://docs.conda.io/en/latest/)
-[![run with docker](https://img.shields.io/badge/run%20with-docker-0db7ed?labelColor=000000&logo=docker)](https://www.docker.com/)
-[![run with singularity](https://img.shields.io/badge/run%20with-singularity-1d355c.svg?labelColor=000000)](https://sylabs.io/docs/)
-[![Launch on Seqera Platform](https://img.shields.io/badge/Launch%20%F0%9F%9A%80-Seqera%20Platform-%234256e7)](https://cloud.seqera.io/launch?pipeline=https://github.com/nf-core/assesspool)
-
-[![Get help on Slack](http://img.shields.io/badge/slack-nf--core%20%23assesspool-4A154B?labelColor=000000&logo=slack)](https://nfcore.slack.com/channels/assesspool)[![Follow on Bluesky](https://img.shields.io/badge/bluesky-%40nf__core-1185fe?labelColor=000000&logo=bluesky)](https://bsky.app/profile/nf-co.re)[![Follow on Mastodon](https://img.shields.io/badge/mastodon-nf__core-6364ff?labelColor=FFFFFF&logo=mastodon)](https://mstdn.science/@nf_core)[![Watch on YouTube](http://img.shields.io/badge/youtube-nf--core-FF0000?labelColor=000000&logo=youtube)](https://www.youtube.com/c/nf-core)
 
 ## Introduction
 
-**nf-core/assesspool** is a bioinformatics pipeline that ...
+**assessPool** is a population genetics analysis pipeline designed for pooled sequencing runs (pool-seq). Starting from raw genomic variants (VCF or sync format), assessPool performs the following operations:
 
-<!-- TODO nf-core:
-   Complete this sentence with a 2-3 sentence summary of what types of data the pipeline ingests, a brief overview of the
-   major pipeline sections and the types of output it produces. You're giving an overview to someone new
-   to nf-core here, in 15-20 seconds. For an example, see https://github.com/nf-core/rnaseq/blob/master/README.md#introduction
--->
+  * Filters SNPs based on adjustable criteria with suggestions for pooled data
+  * Calculates population genetic statistics using [PoPoolation2](https://sourceforge.net/p/popoolation2/wiki/Main/), [poolfstat](https://doi.org/10.1111/1755-0998.13557), and/or [grenedalf](https://github.com/lczech/grenedalf).
+  * Generates an HTML report including visualizations of population genetic statistics
+  * Outputs results in tabular format for downstream analyses
+
+Required inputs are a variant description file (sync or VCF) and a reference assembly (FASTA). These can be output from any number of reduced representation data processing pipelines (e.g., [grenepipe](https://github.com/moiexpositoalonsolab/grenepipe), [dDocent](https://ddocent.com/), etc.).
+
+Major pipeline operations:
+
+1. Import, index, and/or compress variant description and reference
+1. Perform stepwise filtering to determine effects of individual filter options (count lost loci):
+    1. Min/max read depth
+    1. Minor allele count
+    1. Hardy-Weinberg equilibrium cutoff
+    1. Missing data
+    1. Allele length
+    1. Quality:depth ratio
+    1. Minimum read quality
+    1. Variant type
+    1. Mispaired read likelihood
+    1. Alternate observations
+    1. Mapping quality
+    1. Mapping ratio
+    1. Overall depth
+    1. Number of pools with data
+    1. Read balance
+    1. Variant thinning
+1. Perform cumulative filtering (for VCF input)
+1. Generate sync files
+    1. Unified (all pools)
+    1. Split pairwise
+1. Generate allele frequency table
+1. Calculate F<sub>st</sub>
+    1. PoPoolation2
+    1. &#123;poolfstat&#125;
+    1. grenedalf
+1. Calculate Fisher's exact test for individual SNPs
+    1. PoPoolation2
+    1. assessPool native
+1. Join frequency data to F<sub>st</sub> results
+1. Extract contigs containing (user-configurable) strongly-differentiated loci
+1. Create HTML report
+1. Save all output data in tabular format for downstream analysis
 
 <!-- TODO nf-core: Include a figure that guides the user through the major workflow steps. Many nf-core
      workflows use the "tube map" design for that. See https://nf-co.re/docs/guidelines/graphic_design/workflow_diagrams#examples for examples.   -->
-<!-- TODO nf-core: Fill in short bullet-pointed list of the default steps in the pipeline -->
 
 ## Usage
 
 > [!NOTE]
 > If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/usage/installation) on how to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline) with `-profile test` before running the workflow on actual data.
 
-<!-- TODO nf-core: Describe the minimum required steps to execute the pipeline, e.g. how to prepare samplesheets.
-     Explain what rows and columns represent. For instance (please edit as appropriate):
-
-First, prepare a samplesheet with your input data that looks as follows:
+First, prepare a sample sheet with your input data that looks as follows:
 
 `samplesheet.csv`:
 
 ```csv
-sample,fastq_1,fastq_2
-CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz
+project,input,vcf_index,reference,pools,pool_sizes
+poolseq_test,data/pools.vcf.gz,data/pools.vcf.gz.tbi,data/ref.fasta,,"35,38,22,52,17,19"
 ```
 
-Each row represents a fastq file (single-end) or a pair of fastq files (paired end).
+Each row represents a complete pool-seq project or experiment. Column descriptions:
 
--->
+`project` (required): A brief unique identifier for this pool-seq project  
+`input` (required): Variant description file in sync or VCF format (optionally compressed using `bgzip`)  
+`vcf_index` (optional): TABIX-format index of the input VCF file (generated if not supplied)  
+`reference` (required): Reference assembly (FASTA)  
+`pools` (optional): Comma-separated list of pool names (will replace any names in the input file)  
+`pool_sizes` (required): Number of individuals in each pool. Either a single number for uniform pool sizes or a comma-separated list of sizes for each pool.
+
+
+Required columns are `project`, `input`, `reference`, and `pool_sizes`.
 
 Now, you can run the pipeline using:
 
-<!-- TODO nf-core: update the following command to include all required parameters for a minimal example -->
-
 ```bash
-nextflow run nf-core/assesspool \
+nextflow run tobodev/assesspool \
    -profile <docker/singularity/.../institute> \
    --input samplesheet.csv \
    --outdir <OUTDIR>
@@ -67,41 +93,47 @@ nextflow run nf-core/assesspool \
 > [!WARNING]
 > Please provide pipeline parameters via the CLI or Nextflow `-params-file` option. Custom config files including those provided by the `-c` Nextflow option can be used to provide any configuration _**except for parameters**_; see [docs](https://nf-co.re/docs/usage/getting_started/configuration#custom-configuration-files).
 
-For more details and further functionality, please refer to the [usage documentation](https://nf-co.re/assesspool/usage) and the [parameter documentation](https://nf-co.re/assesspool/parameters).
+For more details and further functionality, please refer to the [usage documentation](docs/usage.md) and the [parameter documentation](parameters.md).
+
+## Testing the pipeline
+assessPool comes with two built-in profiles that allow the user to test the pipeline with a fully-functional input dataset. These profiles (whose descriptions can be found in [conf/test.confg](conf/test.config) and [conf/test_full.config](conf/test_full.config)) will run assessPool with either a full or reduced dataset of SNPs sequenced from wild populations of the coral *Montipora capitata*. Pipeline tests can be run by passing either `test` or `test_full` to the `-profile` option, along with a software/container management subsystem. For example, using singularity:
+
+```
+nextflow run tobodev/assesspool \
+  -profile test,singularity
+```
+or
+```
+nextflow run tobodev/assesspool \
+  -profile test_full,singularity
+```
 
 ## Pipeline output
 
-To see the results of an example test run with a full size dataset refer to the [results](https://nf-co.re/assesspool/results) tab on the nf-core website pipeline page.
+Results of an example test run with a full size dataset can be found [here](https://tobodev.github.io/assesspool/).  
 For more details about the output files and reports, please refer to the
-[output documentation](https://nf-co.re/assesspool/output).
+[output documentation](docs/output.md).
 
 ## Credits
 
-nf-core/assesspool was originally written by Evan B Freel, Emily E Conklin, Mykle L Hoban, Derek W Kraft, Jonathan L Whitney, Ingrid SS Knapp, Zac H Forsman, Robert J Toonen.
+assessPool was originally written by Evan B Freel, Emily E Conklin, Mykle L Hoban, Derek W Kraft, Jonathan L Whitney, Ingrid SS Knapp, Zac H Forsman, Robert J Toonen.
 
 We thank the following people for their extensive assistance in the development of this pipeline:
 
-<!-- TODO nf-core: If applicable, make list of people who have also contributed -->
+Richard Coleman, &#x02bb;Ale&#x02bb;alani Dudoit, and Cataixa López, who used assessPool during development and helped identify issues and suggest key feature improvements. We would also like to thank Iliana Baums, Tanya Beirne, Dave Carlon, Greg Conception, Matt Craig, Jeff Eble, Scott Godwin, Matt Iacchei, Frederique Kandel, Steve Karl, Jim Maragos, Bob Moffitt, Joe O'Malley, Lawrie Provost, Jennifer Salerno, Derek Skillings, Michael Stat, Ben Wainwright, and Kim Weersing, for their efforts in sample collection.
 
 ## Contributions and Support
 
 If you would like to contribute to this pipeline, please see the [contributing guidelines](.github/CONTRIBUTING.md).
 
-For further information or help, don't hesitate to get in touch on the [Slack `#assesspool` channel](https://nfcore.slack.com/channels/assesspool) (you can join with [this invite](https://nf-co.re/join/slack)).
-
 ## Citations
 
-<!-- TODO nf-core: Add citation for pipeline after first release. Uncomment lines below and update Zenodo doi and badge at the top of this file. -->
-<!-- If you use nf-core/assesspool for your analysis, please cite it using the following doi: [10.5281/zenodo.XXXXXX](https://doi.org/10.5281/zenodo.XXXXXX) -->
+A list of references for the tools used by the pipeline can be found in the [`CITATIONS.md`](CITATIONS.md) file.
 
-<!-- TODO nf-core: Add bibliography of tools and data used in your pipeline -->
+This pipeline uses code and infrastructure developed and maintained by the [nf-core](https://nf-co.re) community, reused here under the [MIT license](https://github.com/nf-core/tools/blob/master/LICENSE).
 
-An extensive list of references for the tools used by the pipeline can be found in the [`CITATIONS.md`](CITATIONS.md) file.
-
-You can cite the `nf-core` publication as follows:
-
-> **The nf-core framework for community-curated bioinformatics pipelines.**
+> The nf-core framework for community-curated bioinformatics pipelines.
 >
 > Philip Ewels, Alexander Peltzer, Sven Fillinger, Harshil Patel, Johannes Alneberg, Andreas Wilm, Maxime Ulysse Garcia, Paolo Di Tommaso & Sven Nahnsen.
 >
-> _Nat Biotechnol._ 2020 Feb 13. doi: [10.1038/s41587-020-0439-x](https://dx.doi.org/10.1038/s41587-020-0439-x).
+> Nat Biotechnol. 2020 Feb 13. doi: 10.1038/s41587-020-0439-x.
