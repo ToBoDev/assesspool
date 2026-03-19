@@ -55,8 +55,7 @@ Major pipeline operations:
 1. Create HTML report
 1. Save all output data in tabular format for downstream analysis
 
-<!-- TODO nf-core: Include a figure that guides the user through the major workflow steps. Many nf-core
-     workflows use the "tube map" design for that. See https://nf-co.re/docs/guidelines/graphic_design/workflow_diagrams#examples for examples.   -->
+![assessPool flowchart](docs/images/assesspool_flowchart.svg)
 
 ## Usage
 
