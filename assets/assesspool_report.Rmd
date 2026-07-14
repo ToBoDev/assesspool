@@ -990,7 +990,8 @@ nothing <- pool_data[,{
                 layout(
                   # name the figure axes and don't let the user zoom around
                   xaxis = list(title = "Pool 1", fixedrange = TRUE),
-                  yaxis = list(title = "Pool 2", fixedrange = TRUE),
+                  # make sure the heatmap boxes are square
+                  yaxis = list(title = "Pool 2", fixedrange = TRUE, scaleanchor = 'x'),
                   title = list(
                     text = str_glue("{trace_vars$title} (coverage cutoff: &#x2265;{cutoff})"),
                     font = list(
