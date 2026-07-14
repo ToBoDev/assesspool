@@ -86,7 +86,7 @@
                     "@id": ".prettierignore"
                 }
             ],
-            "isBasedOn": "https://github.com/nf-core/assesspool",
+            "isBasedOn": "https://github.com/tobodev/assesspool",
             "license": "MIT",
             "mainEntity": {
                 "@id": "main.nf"
@@ -145,11 +145,10 @@
                 "@id": "https://nf-co.re/"
             },
             "url": [
-                "https://github.com/nf-core/assesspool",
-                "https://nf-co.re/assesspool/dev/"
+                "https://github.com/tobodev/assesspool"
             ],
             "version": [
-                "1.0.0dev"
+                "1.0.0"
             ]
         },
         {
