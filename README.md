@@ -5,8 +5,8 @@
   </picture>
 </h1>
 
+[![DOI](https://zenodo.org/badge/914556234.svg)](https://zenodo.org/badge/latestdoi/914556234)
 [![Nextflow](https://img.shields.io/badge/nextflow-%E2%89%A50.24.04.2-brightgreen.svg)](https://www.nextflow.io/)
-
 ## Introduction
 
 **assessPool** is a population genetics analysis pipeline designed for pooled sequencing runs (pool-seq). Starting from raw genomic variants (VCF or sync format), assessPool performs the following operations:
